@@ -16,6 +16,19 @@ paths = {
 
 gulp.task('compile', function() {
 	var bundler = browserify(paths.entry, watchify.args);
+	return function() {
+		return bundler
+			.bundle()
+			.pipe(source('bomb_arena.min.js'))
+			.pipe(buffer())
+			.pipe(uglify())
+			.pipe(connect.reload())
+			.pipe(gulp.dest(paths.dist))
+	}
+});
+
+gulp.task('watch', function() {
+	var bundler = browserify(paths.entry, watchify.args);
 
 	var bundle = function() {
 		return bundler
